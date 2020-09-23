@@ -27,26 +27,28 @@
         (async()=>{
             // Modern dApp browsers...
             if (window.ethereum) {
+                alert("this is modern dApp broswer")
                 window.web3 = new Web3(ethereum)
                 try {
                     // Request account access if needed
                     await ethereum.enable()
                     // Acccounts now exposed
-                    web3.eth.sendTransaction({/* ... */})
+                    // web3.eth.sendTransaction({/* ... */})
                 } catch (error) {
                     // User denied account access...
                 }
             }
             // Legacy dApp browsers...
             else if (window.web3) {
+                alert("this is legacy dApp browser")
                 App.web3Provider = web3.currentProvider
                 window.web3 = new Web3(web3.currentProvider)
                 // Acccounts always exposed
-                web3.eth.sendTransaction({/* ... */})
+                // web3.eth.sendTransaction({/* ... */})
             }
             // Non-dApp browsers...
             else {
-                console.log('Non-Ethereum browser detected. You should consider trying MetaMask!')
+                alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
             }
             if (typeof web3 !== 'undefined') {
                 App.web3Provider = web3.currentProvider
