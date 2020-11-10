@@ -1,115 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>HopManagement</title>
+        <title>USDT => HOP</title>
         <script src="./jquery.mini.js"></script>
         <script src="./web3.min.js"></script>
+        <script type="module" src ="./app.js"></script>
     </head>
     <body>
-        <h2>smart contract test field</h2>
-        <div id="contract_info" >
-            <input id="broswer_type" disabled="true"/>
-            <input id="account" style="width: 30%;", disabled="true"/>
-            <input id="balance" style="width: 20%;", disabled="true"/>
-            <p>abi:</p>
-            <textarea id="contract_abi" style="width: 80%;height: 100px;">
-            </textarea>
-            <p>address:</p>
-            <input type="text" id = "contract_address" style="width: 40%;"/>
-            <p>name:</p>
-            <input type="text" id = "contract_name" />
-            <button id="load_contract" onclick="loadContract()">import</button>
-            <p>token transfer:</p>
-            <!-- <input type="" -->
-            sender balance: <input id="bas_balance" style="width: 30%;" disabled="true"/><br>
-            receiver: <input id="receiver" style="width: 30%"/><br>
-            
-            send amount <input id="send_bas_amount" style="width: 20%">
-            <button id="send_bas" onclick="sendBas()">send bas</button>
-            <input id= "tx_hash" style="width: 30%;" disabled="true"><br>
+        <h2>Exchange USDT for HOP (Kovan network)</h2>
+        <div>
+            User Address: <input id="user_address" style="width: 320px;" disabled = "true" />
+            USDT Balance: <input id="usdt_balance" disabled = "true" />
+            HOP  Balance: <input id="hop_balance" disabled = "true" />
+        </div>
 
-            <button id="check_bas" onclick="checkBas()">check receiver bas balance</button>
-            <input id="recevier_bas_balance" style="width: 20%"/>
+        <div style="text-align: center;">
+            <p style="font-size: 50px;">
+                1 USDT = <a id="rate">?</a> HOP
+            </p>
+        </div>
 
+        <div style="text-align: center;">
+            <input id="input_usdt" type="number"/><button id= "all">all</button>
+            USDT==> <a id="hop_amount">?</a> HOP
+            <button id="exchange"style="margin-left: 20px;">Exchange!</button>
+        </div>
+
+        <div style="margin-top: 50px;margin-right:100px;text-align: right;">
+            Remaining HOP: <a id="remain_hop">?</a>
         </div>
     </body>
 
     <script>
-         App = {};
-        //load web3
-        (async()=>{
-            // Modern dApp browsers...
-            if (window.ethereum) {
-                $("#broswer_type").val("modern")
-                window.web3 = new Web3(ethereum)
-                try {
-                    // Request account access if needed
-                    await ethereum.enable()
-                    // Acccounts now exposed
-                    // web3.eth.sendTransaction({/* ... */})
-                } catch (error) {
-                    // User denied account access...
-                }
-            }
-            // Legacy dApp browsers...
-            else if (window.web3) {
-                $("#broswer_type").val("Legacy")
-                App.web3Provider = web3.currentProvider
-                window.web3 = new Web3(web3.currentProvider)
-                // Acccounts always exposed
-                // web3.eth.sendTransaction({/* ... */})
-            }
-            // Non-dApp browsers...
-            else {
-                $("#broswer_type").val("none")
-            }
-            if (typeof web3 !== 'undefined') {
-                App.web3Provider = web3.currentProvider
-                web3 = new Web3(web3.currentProvider)
-            } else {
-                window.alert("Please connect to Metamask.")
-            }
-            var current_account = await web3.eth.getAccounts()
-            var balance = await web3.eth.getBalance(current_account[0])
-            $("#account").val(current_account[0])
-            $("#balance").val(balance)
-
-
-            $("#contract_abi").val(window.nbs)
-        })();
-        
-         function loadContract(){
-            console.log("start load contract");
-            var abi_data = JSON.parse($("#contract_abi").val());
-            var address = $("#contract_address").val();
-            var name = $("#contract_name").val();
-            App[name] = web3.eth.contract(abi_data).at(address)
-        }
-
-        //load bas_token
-        _bas_token_abi = [{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"burnFrom","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"constant":false,"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"INITIAL_SUPPLY","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}];
-        _bas_token_address = "0xc51a675d2f18e9912e3bd67014f0892177a9318c";
-        App["bas_token"] = new web3.eth.Contract(_bas_token_abi,_bas_token_address);
-
-        //  0x9add008B9377B5B9a9c1eeB5ac6005dD59982f3E
-        async function sendBas(){
-            let tx = await App.bas_token.methods.transfer($("#receiver").val(), $("#send_bas_amount").val())
-                                                .send({from: $("#account").val()}) 
-            $("#tx_hash").val(tx.transactionHash)
-            return tx
-        }
-
-        async function checkBas(){
-            let receiver_balance = await App.bas_token.methods.balanceOf($("#receiver").val()).call()
-            $("#recevier_bas_balance").val(receiver_balance)
-        }
-
-        //do some stuff
-        (async()=>{
-            var current_account = await web3.eth.getAccounts()
-            let sender_bas_balance = await App.bas_token.methods.balanceOf(current_account[0]).call()
-            $("#bas_balance").val(sender_bas_balance)
-        })()
-
+      
     </script>
 </html>
