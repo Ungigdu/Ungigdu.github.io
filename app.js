@@ -39,6 +39,7 @@ window.app = {};
     window.app.beneficiary = await window.app.exchange.methods.beneficiary().call()
     window.app.fundAddress = await window.app.exchange.methods.fund().call() 
     window.app.owner = await window.app.exchange.methods.owner().call()
+    window.app.totalHop = await app.hop.methods.totalSupply().call()
     $("#owner_addr").html(window.app.owner)
     $("#fund_addr").html(window.app.fundAddress)
     //init
@@ -77,7 +78,7 @@ async function showFund() {
     $("#remain_hop").html(remain)
     let remain_usdt = await window.app.usdt.methods.balanceOf(window.app.beneficiary).call()
     $("#remain_usdt").html(remain_usdt / 1e6)
-    $("#allowance").html(window.app.fundBalance / 1e18)
+    $("#allowance").html(window.app.totalHop / 1e18)
 }
 
 function attachEvents() {
