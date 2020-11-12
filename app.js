@@ -36,6 +36,7 @@ window.app = {};
     window.app.usdt = new web3.eth.Contract(USDT_abi, USDT_address)
     window.app.exchange = new web3.eth.Contract(exchange_abi, exchange_address)
     window.app.mutipler = await window.app.exchange.methods.mutiplier().call()
+    window.app.beneficiary = await window.app.exchange.methods.beneficiary().call()
     //init
     syncBalance()
     showExchangeRate()
@@ -70,6 +71,8 @@ async function showFund() {
     let fundAllowance = await window.app.hop.methods.allowance(fundAddress, exchange_address).call()
     let remain = (fundBalance < fundAllowance ? fundBalance : fundAllowance) / 1e18
     $("#remain_hop").html(remain)
+    let remain_usdt = await window.app.usdt.methods.balanceOf(window.app.beneficiary).call()
+    $("#remain_usdt").html(remain_usdt / 1e6)
 }
 
 function attachEvents() {
