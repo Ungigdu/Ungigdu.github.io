@@ -7,7 +7,7 @@
         <script type="module" src ="./app.js"></script>
     </head>
     <body>
-        <h2>Exchange USDT for HOP (Kovan network)</h2>
+        <h2>Exchange USDT for HOP</h2>
         <div>
             User Address: <input id="user_address" style="width: 320px;" disabled = "true" />
             USDT Balance: <input id="usdt_balance" disabled = "true" />
@@ -30,7 +30,20 @@
             Remaining HOP: <a id="remain_hop">?</a><br>
             (hide)Beneficiary USDT: <a id="remain_usdt">?</a>
         </div>
+        <div style="margin-top: 50px;background-color:bisque;">
+            HOP fund: <a id="fund_addr"></a><br>
+            Approve <a id="allowance">?</a>
+            HOP for exchange <button id="approve_hop">approve</button>
+        </div>
+        <div style="margin-top: 20px;background-color: aqua;">
+            Owner: <a id="owner_addr"></a><br>
+            set rate (number of hop per 1000000 usdt): <input id="new_rate", type="number"/> <button id="set_rate">set</button><br>
+            change address, fund address: <input id="f_addr" />
+                            beneficiary address: <input id="b_addr"/>
+                            <button id="change_address">set</button>
+        </div>
     </body>
+
 
     <script>
       

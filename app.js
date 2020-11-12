@@ -37,6 +37,10 @@ window.app = {};
     window.app.exchange = new web3.eth.Contract(exchange_abi, exchange_address)
     window.app.mutipler = await window.app.exchange.methods.mutiplier().call()
     window.app.beneficiary = await window.app.exchange.methods.beneficiary().call()
+    window.app.fundAddress = await window.app.exchange.methods.fund().call() 
+    window.app.owner = await window.app.exchange.methods.owner().call()
+    $("#owner_addr").html(window.app.owner)
+    $("#fund_addr").html(window.app.fundAddress)
     //init
     syncBalance()
     showExchangeRate()
@@ -66,13 +70,14 @@ function showExchangeRate() {
 }
 
 async function showFund() {
-    let fundAddress = await window.app.exchange.methods.fund().call()
-    let fundBalance = await window.app.hop.methods.balanceOf(fundAddress).call()
-    let fundAllowance = await window.app.hop.methods.allowance(fundAddress, exchange_address).call()
+    let fundBalance = await window.app.hop.methods.balanceOf(window.app.fundAddress).call()
+    window.app.fundBalance = fundBalance
+    let fundAllowance = await window.app.hop.methods.allowance(window.app.fundAddress, exchange_address).call()
     let remain = (fundBalance < fundAllowance ? fundBalance : fundAllowance) / 1e18
     $("#remain_hop").html(remain)
     let remain_usdt = await window.app.usdt.methods.balanceOf(window.app.beneficiary).call()
     $("#remain_usdt").html(remain_usdt / 1e6)
+    $("#allowance").html(window.app.fundBalance / 1e18)
 }
 
 function attachEvents() {
@@ -106,5 +111,31 @@ function attachEvents() {
             syncBalance()
             await showFund()
         })
+    })
+
+    $("#approve_hop").click(()=>{
+        window.app.hop.methods.approve(exchange_address, window.app.fundBalance).send({from: window.app.fundAddress})
+                    .then(async ()=>{
+                        alert("approve success!")
+                        await showFund()
+                    })
+    })
+
+    $("#set_rate").click(()=>{
+        let r = $("#new_rate").val()
+        window.app.exchange.methods.setRate(r).send({from: window.app.owner})
+                            .then(async ()=>{
+                                alert("rate changed!")
+                                await showExchangeRate()
+                            })
+    })
+
+    $("#change_address").click(()=>{
+        let f_address = $("#f_addr").val()
+        let b_address = $("#b_addr").val()
+        window.app.exchange.methods.changeAddress(f_address, b_address).send({from: window.app.owner})
+                        .then(()=>{
+                            alert("address changed, please reload")
+                        })
     })
 }
