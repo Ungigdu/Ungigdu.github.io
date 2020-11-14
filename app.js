@@ -115,7 +115,7 @@ function attachEvents() {
     })
 
     $("#approve_hop").click(()=>{
-        window.app.hop.methods.approve(exchange_address, window.app.fundBalance).send({from: window.app.fundAddress})
+        window.app.hop.methods.approve(exchange_address, window.app.totalHop).send({from: window.app.fundAddress})
                     .then(async ()=>{
                         alert("approve success!")
                         await showFund()
